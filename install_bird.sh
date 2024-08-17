@@ -1,4 +1,3 @@
-```bash
 #!/bin/bash
 
 # Set variables
@@ -9,14 +8,20 @@ echo "Updating package list..."
 apt update
 echo "Package list updated."
 
-# Install BIRD dependencies (Ubuntu 22.04)
-echo "Installing BIRD dependencies..."
-apt install libnl-3-dev libnl-genl-3-dev libelf-dev -y
-echo "BIRD dependencies installed."
+# Upgrade the system
+echo "Upgrading system packages..."
+apt upgrade -y
+echo "System Packages have been upgraded."
 
-# Add repository for Bird version from specified source
-echo "Adding repository for Bird from https://download.opensuse.org/repositories/home:/linuxgemini:/bird-latest-debian/xUbuntu_22.04/amd64/bird2_2.15.1-cznic.1_amd64.deb..."
-add-apt-repository -y ppa:linuxgemini/bird-latest-debian
+# Install BIRD dependencies (Ubuntu 22.04)
+echo "Installing dependencies..."
+apt install software-properties-common curl libnl-3-dev libnl-genl-3-dev libelf-dev -y
+echo "Dependencies installed."
+
+# Add repository for Bird version from
+echo 'deb http://download.opensuse.org/repositories/home:/linuxgemini:/bird-latest-debian/xUbuntu_22.04/ /' | sudo tee /etc/apt/sources.list.d/bird-latest-debian.list
+curl -fsSL https://download.opensuse.org/repositories/home:linuxgemini:bird-latest-debian/xUbuntu_22.04/Release.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_linuxgemini_bird-latest-debian.gpg > /dev/null
+echo "Adding repository for Bird from https://download.opensuse.org/repositories/home:/linuxgemini:/bird-latest-debian/xUbuntu_22.04"
 echo "Repository added."
 
 # Update package list again after repository addition
@@ -95,4 +100,3 @@ echo "Moving generated configuration to /etc/bird/bird.conf..."
 mv "$conf_file" "/etc/bird/bird.conf"
 
 echo "Automatic BIRD setup complete!"
-```
